@@ -5,7 +5,7 @@ import UserListSkeleton from "./UserListSkeleton";
 import EmptyState from "./EmptyState";
 
 interface UserListProps {
-  users: UserRowUser[] | undefined;
+  users: UserRowUser[] | undefined | null;
   searchTerm?: string;
   onUserClick: (user: UserRowUser) => void;
 }
@@ -21,10 +21,10 @@ export default function UserList({
   searchTerm,
   onUserClick,
 }: UserListProps) {
-  const isLoading = users === undefined;
+  const isLoading = users === undefined || users === null;
 
   return (
-    <div className="relative z-10 flex-1 overflow-y-auto px-5 pb-6 space-y-1">
+    <div className="relative z-10 flex-1 overflow-y-auto px-5 pb-6 space-y-1 custom-scrollbar">
       {isLoading && <UserListSkeleton rows={6} />}
 
       {!isLoading &&

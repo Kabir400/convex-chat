@@ -107,8 +107,8 @@ export default function NewChatPage() {
       <SearchBar
         value={rawSearch}
         onChange={setRawSearch}
-        resultCount={users?.length}
-        isLoading={users === undefined}
+        resultCount={users?.length ?? 0}
+        isLoading={users === undefined || users === null}
         debouncedValue={debouncedSearch}
       />
 

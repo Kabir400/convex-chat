@@ -38,7 +38,7 @@ export default function NewGroupPage() {
   // ── convex ────────────────────────────────────────────────────
   const users = useQuery(api.controllers.user.getUsers.getUsers, {
     search: debouncedSearch || undefined,
-  }) as GroupUserRowUser[] | undefined;
+  }) as GroupUserRowUser[] | undefined | null;
 
   const createGroup = useMutation(
     api.controllers.conversation.createGroup.createGroup,
@@ -149,17 +149,19 @@ export default function NewGroupPage() {
         <SearchBar
           value={rawSearch}
           onChange={setRawSearch}
-          resultCount={users?.length}
-          isLoading={users === undefined}
+          resultCount={users?.length ?? 0}
+          isLoading={users === undefined || users === null}
           debouncedValue={debouncedSearch}
         />
       </div>
 
       {/* ── scrollable user list ── */}
       <div className="relative z-10 flex-1 overflow-y-auto px-5 pb-24 space-y-1 custom-scrollbar">
-        {users === undefined && <UserListSkeleton rows={6} />}
+        {(users === undefined || users === null) && (
+          <UserListSkeleton rows={6} />
+        )}
 
-        {users &&
+        {Array.isArray(users) &&
           users.map((user) => (
             <GroupUserRow
               key={user.clerkId}
@@ -169,7 +171,7 @@ export default function NewGroupPage() {
             />
           ))}
 
-        {users && users.length === 0 && (
+        {Array.isArray(users) && users.length === 0 && (
           <EmptyState searchTerm={debouncedSearch} />
         )}
       </div>
